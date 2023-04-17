@@ -24,12 +24,12 @@ const handleMouseDown = (
   postitIndex: number
 ) => {
   const { clientX, clientY } = e;
-  const { offsetLeft: left, offsetTop: top } = postitElement;
+  const { offsetLeft, offsetTop } = postitElement;
 
   const move = (e: MouseEvent) => {
     const { pageX: x, pageY: y } = e;
-    postitElement.style.left = `${left + x - clientX}px`;
-    postitElement.style.top = `${top + y - clientY}px`;
+    postitElement.style.left = `${offsetLeft + x - clientX}px`;
+    postitElement.style.top = `${offsetTop + y - clientY}px`;
   };
 
   const up = () => {

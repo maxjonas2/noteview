@@ -10,7 +10,9 @@ export default function App() {
 
   return (
     <main className='h-[100vh] overflow-hidden relative'>
-      <PostitBoard isPresenter={isPresenter} />
+      <div className='w-[400px] h-[400px] border border-red-700 relative left-10 top-10'>
+        <PostitBoard isPresenter={isPresenter} />
+      </div>
       {/* <Button ref={buttonRef} onClick={handleClick}>
         Click me
       </Button> */}

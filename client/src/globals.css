@@ -4,6 +4,19 @@
   padding: 0;
 }
 
+.postit-deleted {
+  animation: shrink 0.35s ease-in-out forwards;
+}
+
+@keyframes shrink {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
 @tailwind base;
 @tailwind utilities;
 @tailwind components;

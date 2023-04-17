@@ -24,7 +24,7 @@ const handleMouseDown = (
   postitIndex: number
 ) => {
   const { clientX, clientY } = e;
-  const { left, top } = postitElement.getBoundingClientRect();
+  const { offsetLeft: left, offsetTop: top } = postitElement;
 
   const move = (e: MouseEvent) => {
     const { pageX: x, pageY: y } = e;
@@ -67,6 +67,17 @@ const Postit = ({
     }
   }, []);
 
+  function animateDeletion(): Promise<void> {
+    return new Promise((resolve) => {
+      if (postit.current) {
+        postit.current.onanimationend = () => {
+          resolve();
+        };
+        postit.current.classList.add("postit-deleted");
+      }
+    });
+  }
+
   return (
     <div
       ref={postit}
@@ -81,7 +92,11 @@ const Postit = ({
     >
       <button
         className='absolute top-0 right-0 p-1'
-        onClick={() => onDeleteClick(id)}
+        onClick={() =>
+          animateDeletion().then(() => {
+            onDeleteClick(id);
+          })
+        }
       >
         Delete
       </button>

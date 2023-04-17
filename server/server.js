@@ -5,11 +5,16 @@ const { Server } = require("socket.io");
 
 const io = new Server(server, { cors: { origin: "*" } });
 
+let boardItems = [];
+
 io.on("connection", (socket) => {
   console.log("A user connected");
 
-  socket.on("changeEvent", (msg) => {
-    socket.broadcast.emit("changeEvent", msg);
+  socket.emit("changeEvent", boardItems);
+
+  socket.on("changeEvent", (message) => {
+    boardItems = message;
+    socket.broadcast.emit("changeEvent", boardItems);
   });
 });
 

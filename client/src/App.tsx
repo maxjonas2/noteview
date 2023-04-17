@@ -10,15 +10,16 @@ export default function App() {
 
   return (
     <main className='h-[100vh] overflow-hidden relative'>
-      <PostitBoard isPresenter={false} />
+      <PostitBoard isPresenter={isPresenter} />
       {/* <Button ref={buttonRef} onClick={handleClick}>
         Click me
       </Button> */}
       <button
-        className='absolute bottom-2 left-2 p-4'
+        className='absolute bottom-2 left-2 p-2 bg-slate-800 text-white disabled:bg-slate-400'
         onClick={() => setIsPresenter(true)}
+        disabled={isPresenter}
       >
-        Present
+        {isPresenter ? "Presenting" : "Present"}
       </button>
     </main>
   );

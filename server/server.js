@@ -9,7 +9,6 @@ io.on("connection", (socket) => {
   console.log("A user connected");
 
   socket.on("changeEvent", (msg) => {
-    console.log(msg);
     socket.broadcast.emit("changeEvent", msg);
   });
 });

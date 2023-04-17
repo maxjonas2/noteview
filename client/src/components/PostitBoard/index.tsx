@@ -22,17 +22,46 @@ const PostitBoard = ({ isPresenter = false }: { isPresenter: boolean }) => {
     );
   }
 
+  function updateBoard(content: PostitProps[]) {
+    setPostits(
+      content.map((postit) => {
+        return { ...postit, isPresenter: false, onContentChange: null };
+      })
+    );
+  }
+
   useEffect(() => {
     io.current = socket("http://localhost:3000");
 
-    io.current.on("confirm", (message: any) => console.log(message));
-  }, []);
+    if (!isPresenter) {
+      io.current.on("changeEvent", (messageContent: PostitProps[]) => {
+        updateBoard(messageContent);
+      });
+    }
+
+    return () => {
+      io.current?.off("changeEvent");
+      io.current?.disconnect();
+    };
+  }, [isPresenter]);
 
   useEffect(() => {
-    if (io.current) {
+    if (io.current?.connected && isPresenter) {
       io.current.emit("changeEvent", postits);
     }
-  }, [postits.length]);
+  }, [postits]);
+
+  function handlePositionChange(index: number, posX: number, posY: number) {
+    setPostits((postits) =>
+      postits.map((postit) => {
+        if (postit.id === index) {
+          return { ...postit, posX, posY };
+        } else {
+          return postit;
+        }
+      })
+    );
+  }
 
   function addPostit() {
     const newPostit: PostitProps = {
@@ -40,7 +69,9 @@ const PostitBoard = ({ isPresenter = false }: { isPresenter: boolean }) => {
       content: "",
       posX: 0,
       posY: 0,
+      onPositionChange: handlePositionChange,
       onContentChange: handleContentChange,
+      isPresenter,
     };
 
     setPostits([...postits, newPostit]);
@@ -55,8 +86,10 @@ const PostitBoard = ({ isPresenter = false }: { isPresenter: boolean }) => {
             id={postit.id}
             content={postit.content}
             onContentChange={postit.onContentChange}
+            onPositionChange={postit.onPositionChange}
             posX={postit.posX}
             posY={postit.posY}
+            isPresenter={isPresenter}
           />
         );
       })}

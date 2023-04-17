@@ -63,6 +63,10 @@ const PostitBoard = ({ isPresenter = false }: { isPresenter: boolean }) => {
     );
   }
 
+  function handleDelete(index: number) {
+    setPostits((postits) => postits.filter((postit) => postit.id !== index));
+  }
+
   function addPostit() {
     const newPostit: PostitProps = {
       id: postits.length,
@@ -71,6 +75,7 @@ const PostitBoard = ({ isPresenter = false }: { isPresenter: boolean }) => {
       posY: 0,
       onPositionChange: handlePositionChange,
       onContentChange: handleContentChange,
+      onDeleteClick: handleDelete,
       isPresenter,
     };
 
@@ -90,6 +95,7 @@ const PostitBoard = ({ isPresenter = false }: { isPresenter: boolean }) => {
             posX={postit.posX}
             posY={postit.posY}
             isPresenter={isPresenter}
+            onDeleteClick={postit.onDeleteClick}
           />
         );
       })}

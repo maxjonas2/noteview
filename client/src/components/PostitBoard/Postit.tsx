@@ -14,6 +14,7 @@ export type PostitProps = {
   posY: number;
   isPresenter: boolean;
   onPositionChange: PositionChangeEvent;
+  onDeleteClick: (index: number) => void;
 };
 
 const handleMouseDown = (
@@ -53,6 +54,7 @@ const Postit = ({
   posY,
   isPresenter,
   onPositionChange,
+  onDeleteClick,
 }: PostitProps) => {
   const postit = useRef<HTMLDivElement>(null);
 
@@ -77,6 +79,12 @@ const Postit = ({
         isPresenter ? "" : "pointer-events-none"
       }`}
     >
+      <button
+        className='absolute top-0 right-0 p-1'
+        onClick={() => onDeleteClick(id)}
+      >
+        Delete
+      </button>
       <textarea
         disabled={!isPresenter}
         spellCheck={false}

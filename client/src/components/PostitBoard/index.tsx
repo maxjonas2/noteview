@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Postit from "./Postit";
-import socket from "socket.io-client";
-
-const io = socket("https://teste.com");
+import socket, { Socket } from "socket.io-client";
+import { v4 } from "uuid";
 
 import type { PostitProps } from "./Postit";
 
-const PostitBoard = () => {
+const PostitBoard = ({ isPresenter = false }: { isPresenter: boolean }) => {
   const [postits, setPostits] = useState<PostitProps[]>([]);
+
+  const io = useRef<Socket>();
 
   function handleContentChange(index: number, value: string) {
     setPostits((postits) =>
@@ -20,6 +21,18 @@ const PostitBoard = () => {
       })
     );
   }
+
+  useEffect(() => {
+    io.current = socket("http://localhost:3000");
+
+    io.current.on("confirm", (message: any) => console.log(message));
+  }, []);
+
+  useEffect(() => {
+    if (io.current) {
+      io.current.emit("changeEvent", postits);
+    }
+  }, [postits.length]);
 
   function addPostit() {
     const newPostit: PostitProps = {

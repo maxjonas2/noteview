@@ -3,6 +3,8 @@ const app = express();
 const server = require("http").createServer(app);
 const { Server } = require("socket.io");
 
+app.use(express.static("public"));
+
 const io = new Server(server, { cors: { origin: "*" } });
 
 let boardItems = [];
